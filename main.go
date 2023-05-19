@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/gorilla/mux"
@@ -33,5 +34,6 @@ func main() {
 	subRouter2.Use(authMiddleware)
 	subRouter2.HandleFunc("/users", createUser).Methods("POST")
 
+	fmt.Println("Listening on Port 8000")
 	log.Fatal(http.ListenAndServe(":8000", mainRouter))
 }

@@ -9,7 +9,7 @@ import (
 func connectDB() {
 	// Open the SQLite database file
 	var err error
-	db, err = sql.Open("sqlite3", "login-test.db")
+	db, err = sql.Open("sqlite3", "db_user.db")
 	if err != nil {
 		log.Fatal(err)
 	}
