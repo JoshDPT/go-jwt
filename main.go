@@ -17,7 +17,7 @@ type User struct {
 }
 
 var db *sql.DB
-var jwtSecret = []byte("your-secret-key") // Replace with your own secret key
+var jwtSecret = []byte("1234") // Replace with your own secret key
 
 func main() {
 	// Connect to the database
@@ -33,6 +33,7 @@ func main() {
 	subRouter2 := mainRouter.PathPrefix("/api/v2").Subrouter()
 	subRouter2.Use(authMiddleware)
 	subRouter2.HandleFunc("/users", createUser).Methods("POST")
+	subRouter2.HandleFunc("/users", getUsers).Methods("GET")
 
 	fmt.Println("Listening on Port 8000")
 	log.Fatal(http.ListenAndServe(":8000", mainRouter))
