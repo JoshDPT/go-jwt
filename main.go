@@ -17,7 +17,7 @@ type User struct {
 }
 
 var db *sql.DB
-var jwtSecret = []byte("1234") // Replace with your own secret key
+var jwtSecret = []byte(getMyEnv("JWT_TOKEN")) // Replace with your own secret key - from env file
 
 func main() {
 	// Connect to the database
@@ -31,7 +31,11 @@ func main() {
 	
 	// JWT protected routers
 	subRouter2 := mainRouter.PathPrefix("/api/v2").Subrouter()
-	subRouter2.Use(authMiddleware)
+
+	// AUTH middleware
+	// subRouter2.Use(authMiddleware)
+
+	// JWT protected subrouter endpoints
 	subRouter2.HandleFunc("/users", createUser).Methods("POST")
 	subRouter2.HandleFunc("/users", getUsers).Methods("GET")
 	subRouter2.HandleFunc("/users", updateUser).Methods("PUT")

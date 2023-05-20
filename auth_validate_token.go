@@ -25,8 +25,8 @@ func validateToken(tokenString string) (bool, error) {
 
 		// Provide the secret key used to sign the token
 		// Replace "your-secret-key" with your actual secret key
-		secretKey := []byte("1234")
-		return secretKey, nil
+		// secretKey := []byte("1234")
+		return jwtSecret, nil
 	})
 
 	if err != nil {
