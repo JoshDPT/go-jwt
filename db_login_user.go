@@ -55,7 +55,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return the signed JWT token
-	fmt.Println("Success in logging on, returned JWT")
+	fmt.Println("Success in authenticating user")
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"token": signedToken})
 }
