@@ -31,10 +31,11 @@ func main() {
 	
 	// JWT protected routers
 	subRouter2 := mainRouter.PathPrefix("/api/v2").Subrouter()
-	// subRouter2.Use(authMiddleware)
+	subRouter2.Use(authMiddleware)
 	subRouter2.HandleFunc("/users", createUser).Methods("POST")
 	subRouter2.HandleFunc("/users", getUsers).Methods("GET")
 	subRouter2.HandleFunc("/users", updateUser).Methods("PUT")
+	subRouter2.HandleFunc("/users", deleteUser).Methods("DELETE")
 
 	fmt.Println("Listening on Port 8000")
 	log.Fatal(http.ListenAndServe(":8000", mainRouter))
