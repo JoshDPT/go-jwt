@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	_ "github.com/mattn/go-sqlite3"
@@ -9,6 +10,11 @@ import (
 
 func validateToken(tokenString string) (bool, error) {
 	fmt.Println("inside Validate Token Func", tokenString)
+
+	// Remove the "Bearer " prefix from the token string
+	if len(tokenString) > 7 && strings.ToUpper(tokenString[0:7]) == "BEARER " {
+		tokenString = tokenString[7:]
+	}
 
 	// Parse the JWT token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -28,7 +34,7 @@ func validateToken(tokenString string) (bool, error) {
 		return false, err
 	}
 
-	// Check if the token is valid and has valid signature
+	// Check if the token is valid and has a valid signature
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 
 		// Extract the required information from claims, if needed
@@ -44,3 +50,4 @@ func validateToken(tokenString string) (bool, error) {
 	fmt.Println("token not valid")
 	return false, nil
 }
+
