@@ -1,8 +1,8 @@
 package main
 
 import (
+	"log"
 	"net/http"
-	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -21,13 +21,13 @@ func authMiddleware(next http.Handler) http.Handler {
 		// Validate the token
 		isValid, err := validateToken(tokenString)
 		if err != nil || !isValid {
-			fmt.Println("Token is not valid")
+			log.Println("Token is not valid")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
 
 		// Token is valid, proceed to the next handler
-		fmt.Println("Token is valid")
+		log.Println("Token is valid")
 		next.ServeHTTP(w, r)
 	})
 }

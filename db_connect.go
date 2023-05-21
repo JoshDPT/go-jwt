@@ -1,9 +1,8 @@
 package main
 
 import (
-	"log"
-	"fmt"
 	"database/sql"
+	"log"
 )
 
 func connectDB() {
@@ -13,7 +12,7 @@ func connectDB() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Opened database file")
+	log.Println("Successfully connected to database")
 
 	// Create the users table if it doesn't exist
 	createTable := `

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -50,4 +50,3 @@ func validateToken(tokenString string) (bool, error) {
 	fmt.Println("token not valid")
 	return false, nil
 }
-

@@ -32,7 +32,7 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteUserByID(id string) error {
-	
+
 	// Initialize the SQL delete query
 	query := "DELETE FROM users WHERE id = ?"
 

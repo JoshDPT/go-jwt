@@ -40,7 +40,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 // Func for getting all users is no query params
 func getAllUsers() ([]User, error) {
 
-	// Initialize SQL query as variable 
+	// Initialize SQL query as variable
 	query := "SELECT id, username, password FROM users"
 
 	// Query the database with the query string

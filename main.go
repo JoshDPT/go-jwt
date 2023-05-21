@@ -4,10 +4,9 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
-	"fmt"
 
-	_ "github.com/mattn/go-sqlite3"
 	"github.com/gorilla/mux"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type User struct {
@@ -28,12 +27,12 @@ func main() {
 	// Unprotected login route to get JWT token
 	subRouter1 := mainRouter.PathPrefix("/api/v1").Subrouter()
 	subRouter1.HandleFunc("/login", login).Methods("POST")
-	
+
 	// JWT protected routers
 	subRouter2 := mainRouter.PathPrefix("/api/v2").Subrouter()
 
 	// AUTH middleware
-	// subRouter2.Use(authMiddleware)
+	subRouter2.Use(authMiddleware)
 
 	// JWT protected subrouter endpoints
 	subRouter2.HandleFunc("/users", createUser).Methods("POST")
@@ -41,6 +40,6 @@ func main() {
 	subRouter2.HandleFunc("/users", updateUser).Methods("PUT")
 	subRouter2.HandleFunc("/users", deleteUser).Methods("DELETE")
 
-	fmt.Println("Listening on Port 8000")
+	log.Println("Server is available at http://localhost:8000")
 	log.Fatal(http.ListenAndServe(":8000", mainRouter))
 }
