@@ -3,9 +3,9 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
+	"log"
 
 	"github.com/golang-jwt/jwt"
 	_ "github.com/mattn/go-sqlite3"
@@ -55,7 +55,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return the signed JWT token
-	fmt.Println("Success in authenticating user")
+	log.Println("Success in authenticating user")
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"token": signedToken})
 }

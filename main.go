@@ -16,7 +16,7 @@ type User struct {
 }
 
 var db *sql.DB
-var jwtSecret = []byte(getMyEnv("JWT_TOKEN")) // Replace with your own secret key - from env file
+var jwtSecret = []byte(getMyEnv("JWT_TOKEN"))
 
 func main() {
 	// Connect to the database
@@ -31,10 +31,10 @@ func main() {
 	// JWT protected routers
 	subRouter2 := mainRouter.PathPrefix("/api/v2").Subrouter()
 
-	// AUTH middleware
+	// Use AUTH middleware
 	subRouter2.Use(authMiddleware)
 
-	// JWT protected subrouter endpoints
+	// Define JWT protected subrouter endpoints
 	subRouter2.HandleFunc("/users", createUser).Methods("POST")
 	subRouter2.HandleFunc("/users", getUsers).Methods("GET")
 	subRouter2.HandleFunc("/users", updateUser).Methods("PUT")
@@ -43,3 +43,4 @@ func main() {
 	log.Println("Server is available at http://localhost:8000")
 	log.Fatal(http.ListenAndServe(":8000", mainRouter))
 }
+

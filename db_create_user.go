@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -35,6 +35,6 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return a success response
-	fmt.Println("Success in adding user")
+	log.Println("Success in creating user")
 	w.WriteHeader(http.StatusCreated)
 }

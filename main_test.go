@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"log"
 	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -60,7 +61,7 @@ func Test_login(t *testing.T) {
 	}
 
 	jwtToken := response.Token
-	fmt.Println(jwtToken)
+	log.Println(jwtToken)
 	// Now you can use the `jwtToken` variable to assert or perform further actions based on the received JWT token.
 	// For example, you can log it, save it, or use it for subsequent authenticated requests.
 
@@ -136,7 +137,7 @@ func Test_login(t *testing.T) {
 
 	var id int
 
-	fmt.Println(users)
+	log.Println(users)
 	
 	for _,o := range users {
 		if o.Username == "jimmy" {
@@ -144,7 +145,7 @@ func Test_login(t *testing.T) {
 		}
 	}
 
-	fmt.Println(id)
+	log.Println(id)
 	// Check the response status code
 	if resp3.StatusCode != http.StatusOK {
 		t.Errorf("Expected status 200, but got %d", resp3.StatusCode)

@@ -46,7 +46,6 @@ func connectTestDB() {
 	}
 
 	// This is for testing purposes to create JWT token
-
 	err = db.Ping()
 	if err != nil {
 		log.Fatal(err)
