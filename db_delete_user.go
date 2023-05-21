@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -28,6 +29,7 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 	response := map[string]string{
 		"message": fmt.Sprintf("User with ID %s has been deleted", id),
 	}
+	log.Printf("Delete user ID: %s successful", id)
 	json.NewEncoder(w).Encode(response)
 }
 

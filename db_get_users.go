@@ -21,7 +21,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 
 		// Return the user as JSON response
 		json.NewEncoder(w).Encode(user)
-		log.Printf("Serving user with ID: %s\n", id)
+		log.Printf("Serve user ID: %s successful", id)
 	} else {
 		// Handle the request to get all users
 		users, err := getAllUsers()
@@ -33,7 +33,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 
 		// Return the users as JSON response
 		json.NewEncoder(w).Encode(users)
-		log.Println("Serving all users")
+		log.Println("Serve all users successful")
 	}
 }
 

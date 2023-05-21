@@ -12,7 +12,7 @@ func connectDB() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Successfully connected to database")
+	log.Println("Connection to database successful")
 
 	// Create the users table if it doesn't exist
 	createTable := `

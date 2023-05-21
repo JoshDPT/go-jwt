@@ -7,15 +7,32 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"log"
 	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func Test_login(t *testing.T) {
+func TestLoginAndCreateUser(t *testing.T) {
+	// Set up test environment
 	connectTestDB()
-	// Set up a test HTTP server
+
+	// Perform login and retrieve JWT token
+	jwtToken := performLogin_test(t)
+
+	// Use JWT token to create a new user
+	createUser_test(t, jwtToken)
+
+
+	// Use JWT token to get all users and find ID of created user
+	id := getUsersAndFindUserID_test(t, jwtToken)
+
+	// se JWT token to delete created user with ID query params
+	deleteUserByID_test(t, jwtToken, id)
+}
+
+
+func performLogin_test(t *testing.T) string {
+
 	server := httptest.NewServer(http.HandlerFunc(login))
 	defer server.Close()
 
@@ -60,68 +77,62 @@ func Test_login(t *testing.T) {
 		t.Fatalf("Failed to parse response JSON: %v", err)
 	}
 
-	jwtToken := response.Token
-	log.Println(jwtToken)
-	// Now you can use the `jwtToken` variable to assert or perform further actions based on the received JWT token.
-	// For example, you can log it, save it, or use it for subsequent authenticated requests.
+	return response.Token
+}
 
-
-	server2 := httptest.NewServer(http.HandlerFunc(createUser))
-	defer server2.Close()
+func createUser_test(t *testing.T, jwtToken string) {
+	// Set up a test HTTP server for creating user
+	server := httptest.NewServer(http.HandlerFunc(createUser))
+	defer server.Close()
 
 	// Define the request body as a byte slice
-	requestBody2 := []byte(`{"username": "jimmy", "password": "john"}`)
+	requestBody := []byte(`{"username": "jimmy", "password": "john"}`)
 
 	// Create a new POST request with the request body
-	req2, err := http.NewRequest(http.MethodPost, server2.URL+"/api/v2/users", bytes.NewBuffer(requestBody2))
+	req, err := http.NewRequest(http.MethodPost, server.URL+"/api/v2/users", bytes.NewBuffer(requestBody))
 	if err != nil {
 		t.Fatalf("Failed to create request: %v", err)
 	}
 
-	req2.Header.Add("Content-Type", "application/json")
-	req2.Header.Add("Authorization", "Bearer "+jwtToken)
-	
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+jwtToken)
 
 	// Send the request
-	client2 := &http.Client{}
-	resp2, err := client2.Do(req2)
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		t.Fatalf("Failed to send request: %v", err)
 	}
-	defer resp2.Body.Close()
 
-	// Check the response status code
-	if resp2.StatusCode != http.StatusCreated {
-		t.Errorf("Expected status 200, but got %d", resp2.StatusCode)
+	if resp.StatusCode != http.StatusCreated {
+		t.Errorf("Expected status 201, but got %d", resp.StatusCode)
 	}
+}
 
+func getUsersAndFindUserID_test(t *testing.T, jwtToken string) int {
+	// Set up a test HTTP server for getting users
+	server := httptest.NewServer(http.HandlerFunc(getUsers))
+	defer server.Close()
 
-
-
-	server3 := httptest.NewServer(http.HandlerFunc(getUsers))
-	defer server3.Close()
-
-	// Create a new GET request with the request body
-	req3, err := http.NewRequest(http.MethodGet, server3.URL+"/api/v2/users", nil)
+	// Create a new GET request
+	req, err := http.NewRequest(http.MethodGet, server.URL+"/api/v2/users", nil)
 	if err != nil {
 		t.Fatalf("Failed to create request: %v", err)
 	}
 
-	req3.Header.Add("Content-Type", "application/json")
-	req3.Header.Add("Authorization", "Bearer "+jwtToken)
-	
-
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+jwtToken)
 
 	// Send the request
-	client3 := &http.Client{}
-	resp3, err := client3.Do(req3)
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		t.Fatalf("Failed to send request: %v", err)
 	}
-	defer resp3.Body.Close()
+	defer resp.Body.Close()
 
 	// Read the response body
-	body3, err := ioutil.ReadAll(resp3.Body)
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatalf("Failed to read response body: %v", err)
 	}
@@ -130,56 +141,54 @@ func Test_login(t *testing.T) {
 	var users []User
 
 	// Unmarshal the JSON array into the slice of objects
-	err = json.Unmarshal(body3, &users)
+	err = json.Unmarshal(body, &users)
 	if err != nil {
 		t.Fatalf("Failed to parse response JSON: %v", err)
 	}
 
 	var id int
 
-	log.Println(users)
-	
-	for _,o := range users {
+	for _, o := range users {
 		if o.Username == "jimmy" {
 			id = o.ID
 		}
 	}
 
-	log.Println(id)
 	// Check the response status code
-	if resp3.StatusCode != http.StatusOK {
-		t.Errorf("Expected status 200, but got %d", resp3.StatusCode)
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("Expected status 200, but got %d", resp.StatusCode)
 	}
 
+	return id
+}
 
+func deleteUserByID_test(t *testing.T, jwtToken string, id int) {
+	// Set up a test HTTP server for deleting user
+	server := httptest.NewServer(http.HandlerFunc(deleteUser))
+	defer server.Close()
 
-
-	server4 := httptest.NewServer(http.HandlerFunc(deleteUser))
-	defer server4.Close()
-
-	// Create a new POST request with the request body
-	req4, err := http.NewRequest(http.MethodDelete, server4.URL+"/api/v2/users?id="+fmt.Sprint(id), nil)
+	// Create a new DELETE request
+	req, err := http.NewRequest(http.MethodDelete, server.URL+"/api/v2/users?id="+fmt.Sprint(id), nil)
 	if err != nil {
 		t.Fatalf("Failed to create request: %v", err)
 	}
 
 	// Set the request headers if necessary
-	req4.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
 	// Set the authorization header with the JWT token
-	req4.Header.Set("Authorization", "Bearer "+jwtToken)
-
+	req.Header.Set("Authorization", "Bearer "+jwtToken)
 
 	// Send the request
-	client4 := &http.Client{}
-	resp4, err := client4.Do(req4)
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		t.Fatalf("Failed to send request: %v", err)
 	}
-	defer resp4.Body.Close()
+	defer resp.Body.Close()
 
 	// Check the response status code
-	if resp4.StatusCode != http.StatusOK {
-		t.Errorf("Expected status 200, but got %d", resp4.StatusCode)
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("Expected status 200, but got %d", resp.StatusCode)
 	}
 }

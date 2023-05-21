@@ -35,6 +35,6 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return a success response
-	log.Println("Success in creating user")
+	log.Println("User creation successful")
 	w.WriteHeader(http.StatusCreated)
 }
