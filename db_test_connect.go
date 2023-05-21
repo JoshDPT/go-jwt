@@ -51,4 +51,3 @@ func connectTestDB() {
 		log.Fatal(err)
 	}
 }
-

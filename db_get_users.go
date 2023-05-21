@@ -13,6 +13,7 @@ import (
 // If there is an error retrieving the user(s) from the database, it returns a 500 Internal Server Error status.
 //
 // The returned user(s) are encoded as JSON and sent in the response body.
+
 func getUsers(w http.ResponseWriter, r *http.Request) {
 	// Get the value of the "id" query parameter
 	id := r.URL.Query().Get("id")

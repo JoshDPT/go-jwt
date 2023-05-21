@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"golang.org/x/time/rate"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -17,12 +18,16 @@ type User struct {
 
 var db *sql.DB
 var jwtSecret = []byte(getMyEnv("JWT_TOKEN"))
+var limiter = rate.NewLimiter(2, 5) // Allowing 2 requests per 5 seconds
 
 func main() {
 	// Connect to the database
 	connectDB()
 
 	mainRouter := mux.NewRouter()
+
+	// Rate limiting middleware
+	mainRouter.Use(rateLimitMiddleware)
 
 	// Unprotected login route to get JWT token
 	subRouter1 := mainRouter.PathPrefix("/api/v1").Subrouter()
@@ -43,4 +48,3 @@ func main() {
 	log.Println("Server is available at http://localhost:8000")
 	log.Fatal(http.ListenAndServe(":8000", mainRouter))
 }
-

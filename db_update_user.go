@@ -20,6 +20,7 @@ import (
 // 500 Internal Server Error status.
 //
 // If the user update is successful, it returns a 200 OK status.
+
 func updateUser(w http.ResponseWriter, r *http.Request) {
 	var user User
 	err := json.NewDecoder(r.Body).Decode(&user)

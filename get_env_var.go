@@ -11,6 +11,7 @@ import (
 // If the .env file cannot be loaded or the specified environment variable is not found,
 // it logs a fatal error and exits the program.
 // The function returns the value of the environment variable as a string.
+
 func getMyEnv(s string) string {
 	// Load the .env file
 	err := godotenv.Load(".env")

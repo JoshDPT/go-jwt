@@ -15,7 +15,6 @@ import (
 // If there is an error inserting the user, it returns a 500 Internal Server Error status.
 // Otherwise, it returns a success response with a 201 Created status.
 
-
 func createUser(w http.ResponseWriter, r *http.Request) {
 	var user User
 	err := json.NewDecoder(r.Body).Decode(&user)

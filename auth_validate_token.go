@@ -16,7 +16,6 @@ import (
 // It returns a boolean indicating whether the token is valid and an error, if any.
 // If there is an error parsing or validating the token, it logs the error and returns false.
 
-
 func validateToken(tokenString string) (bool, error) {
 	// fmt.Println("inside Validate Token Func", tokenString)
 

@@ -3,9 +3,9 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
-	"log"
 
 	"github.com/golang-jwt/jwt"
 	_ "github.com/mattn/go-sqlite3"

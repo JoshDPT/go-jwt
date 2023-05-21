@@ -3,11 +3,11 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -22,14 +22,12 @@ func TestLoginAndCreateUser(t *testing.T) {
 	// Use JWT token to create a new user
 	createUser_test(t, jwtToken)
 
-
 	// Use JWT token to get all users and find ID of created user
 	id := getUsersAndFindUserID_test(t, jwtToken)
 
 	// se JWT token to delete created user with ID query params
 	deleteUserByID_test(t, jwtToken, id)
 }
-
 
 func performLogin_test(t *testing.T) string {
 
