@@ -11,6 +11,21 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// login authenticates a user by validating their credentials against
+// the database and generates a JWT token upon successful authentication.
+// It expects a JSON payload containing the user's username and password in the request body.
+//
+// If the request body is not a valid JSON or the user's credentials are
+// invalid or not found, it returns a 401 Unauthorized status.
+//
+// Upon successful authentication, it generates a JWT token with the user's
+// ID and username, signed with a secret key, and returns the signed token in the response.
+//
+// The token has an expiration time set to 24 hours from the current time.
+//
+// If there is an error during the authentication or token generation process,
+// it returns a 500 Internal Server Error status.
+
 func login(w http.ResponseWriter, r *http.Request) {
 	var user User
 	err := json.NewDecoder(r.Body).Decode(&user)

@@ -7,6 +7,14 @@ import (
 	"net/http"
 )
 
+// deleteUser handles the deletion of a user based on the provided "id" query parameter.
+// It first checks if the "id" parameter is provided and returns a 400 Bad Request status if it is missing.
+// Then, it attempts to delete the user with the corresponding ID from the database using the deleteUserByID function.
+// If there is an error deleting the user, it returns a 500 Internal Server Error status.
+// Otherwise, it returns a success response indicating that the user has been deleted.
+//
+// The success response is encoded as JSON and sent in the response body.
+
 func deleteUser(w http.ResponseWriter, r *http.Request) {
 
 	// Get the value of the "id" query parameter
@@ -32,6 +40,11 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Delete user ID: %s successful", id)
 	json.NewEncoder(w).Encode(response)
 }
+
+// deleteUserByID deletes the user from the database with the provided ID.
+// It executes a SQL delete query to remove the user from the "users" table.
+// If there is an error executing the delete query, it returns the error.
+// Otherwise, it returns nil to indicate successful deletion.
 
 func deleteUserByID(id string) error {
 

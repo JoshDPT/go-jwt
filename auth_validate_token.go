@@ -8,8 +8,17 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// validateToken validates the provided JWT token string.
+// It removes the "Bearer " prefix from the token string, if present.
+// Then, it parses the token and validates its signature using the secret key.
+// If the token is valid, it extracts the required information from the claims.
+// Additional validation logic can be implemented if needed.
+// It returns a boolean indicating whether the token is valid and an error, if any.
+// If there is an error parsing or validating the token, it logs the error and returns false.
+
+
 func validateToken(tokenString string) (bool, error) {
-	fmt.Println("inside Validate Token Func", tokenString)
+	// fmt.Println("inside Validate Token Func", tokenString)
 
 	// Remove the "Bearer " prefix from the token string
 	if len(tokenString) > 7 && strings.ToUpper(tokenString[0:7]) == "BEARER " {
@@ -23,9 +32,6 @@ func validateToken(tokenString string) (bool, error) {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		// Provide the secret key used to sign the token
-		// Replace "your-secret-key" with your actual secret key
-		// secretKey := []byte("1234")
 		return jwtSecret, nil
 	})
 

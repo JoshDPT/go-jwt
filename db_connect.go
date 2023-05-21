@@ -5,6 +5,12 @@ import (
 	"log"
 )
 
+// connectDB establishes a connection to the SQLite database file.
+// It opens the database file and creates the users table if it doesn't exist.
+// If there is an error opening the database file or creating the table, it logs the error and terminates the program.
+// After successfully connecting to the database, it logs a success message.
+
+
 func connectDB() {
 	// Open the SQLite database file
 	var err error
