@@ -8,7 +8,7 @@ import (
 func connectTestDB() {
 	// Open the SQLite database file
 	var err error
-	db, err = sql.Open("sqlite3", "login-test.db")
+	db, err = sql.Open("sqlite3", "db_user_test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,6 +44,8 @@ func connectTestDB() {
 			log.Fatal(err)
 		}
 	}
+
+	// This is for testing purposes to create JWT token
 
 	err = db.Ping()
 	if err != nil {
