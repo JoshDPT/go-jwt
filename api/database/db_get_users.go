@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"encoding/json"
@@ -14,7 +14,7 @@ import (
 //
 // The returned user(s) are encoded as JSON and sent in the response body.
 
-func getUsers(w http.ResponseWriter, r *http.Request) {
+func GetUsers(w http.ResponseWriter, r *http.Request) {
 	// Get the value of the "id" query parameter
 	id := r.URL.Query().Get("id")
 

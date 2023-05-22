@@ -1,4 +1,4 @@
-package main
+package middleware
 
 import (
 	"log"
@@ -15,7 +15,7 @@ import (
 // It logs whether the token is valid or not.
 // It takes the next http.Handler as input and returns an http.Handler.
 
-func authMiddleware(next http.Handler) http.Handler {
+func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get the authorization header from the request
 		tokenString := r.Header.Get("Authorization")

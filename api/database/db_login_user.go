@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"database/sql"
@@ -7,9 +7,13 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/JoshDPT/go-jwt/api/lib"
+
 	"github.com/golang-jwt/jwt"
 	_ "github.com/mattn/go-sqlite3"
 )
+
+var jwtSecret = []byte(lib.GetMyEnv("JWT_TOKEN"))
 
 // login authenticates a user by validating their credentials against
 // the database and generates a JWT token upon successful authentication.
@@ -26,7 +30,7 @@ import (
 // If there is an error during the authentication or token generation process,
 // it returns a 500 Internal Server Error status.
 
-func login(w http.ResponseWriter, r *http.Request) {
+func Login(w http.ResponseWriter, r *http.Request) {
 	var user User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {

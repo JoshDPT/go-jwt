@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"encoding/json"
@@ -8,6 +8,12 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+type User struct {
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 // createUser handles the creation of a new user based on the provided request body.
 // It decodes the JSON request body into a User struct and performs validation on the user data.
 // If the user data is invalid (empty username or password), it returns a 400 Bad Request status.
@@ -15,7 +21,7 @@ import (
 // If there is an error inserting the user, it returns a 500 Internal Server Error status.
 // Otherwise, it returns a success response with a 201 Created status.
 
-func createUser(w http.ResponseWriter, r *http.Request) {
+func CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {

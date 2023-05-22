@@ -1,11 +1,11 @@
-package main
+package database
 
 import (
 	"database/sql"
 	"log"
 )
 
-func connectTestDB() {
+func ConnectTestDB() {
 	// Open the SQLite database file
 	var err error
 	db, err = sql.Open("sqlite3", "db_user_test.db")

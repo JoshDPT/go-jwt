@@ -1,12 +1,12 @@
 package main
 
 import (
-	"database/sql"
+	"github.com/JoshDPT/go-jwt/api/database"
+	"github.com/JoshDPT/go-jwt/api/middleware"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"golang.org/x/time/rate"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -16,34 +16,30 @@ type User struct {
 	Password string `json:"password"`
 }
 
-var db *sql.DB
-var jwtSecret = []byte(getMyEnv("JWT_TOKEN"))
-var limiter = rate.NewLimiter(2, 5) // Allowing 2 requests per 5 seconds
-
 func main() {
 	// Connect to the database
-	connectDB()
+	database.ConnectDB()
 
 	mainRouter := mux.NewRouter()
 
 	// Rate limiting middleware
-	mainRouter.Use(rateLimitMiddleware)
+	mainRouter.Use(middleware.RateLimitMiddleware)
 
 	// Unprotected login route to get JWT token
 	subRouter1 := mainRouter.PathPrefix("/api/v1").Subrouter()
-	subRouter1.HandleFunc("/login", login).Methods("POST")
+	subRouter1.HandleFunc("/login", database.Login).Methods("POST")
 
 	// JWT protected routers
 	subRouter2 := mainRouter.PathPrefix("/api/v2").Subrouter()
 
 	// Use AUTH middleware
-	subRouter2.Use(authMiddleware)
+	subRouter2.Use(middleware.AuthMiddleware)
 
 	// Define JWT protected subrouter endpoints
-	subRouter2.HandleFunc("/users", createUser).Methods("POST")
-	subRouter2.HandleFunc("/users", getUsers).Methods("GET")
-	subRouter2.HandleFunc("/users", updateUser).Methods("PUT")
-	subRouter2.HandleFunc("/users", deleteUser).Methods("DELETE")
+	subRouter2.HandleFunc("/users", database.CreateUser).Methods("POST")
+	subRouter2.HandleFunc("/users", database.GetUsers).Methods("GET")
+	subRouter2.HandleFunc("/users", database.UpdateUser).Methods("PUT")
+	subRouter2.HandleFunc("/users", database.DeleteUser).Methods("DELETE")
 
 	log.Println("Server is available at http://localhost:8000")
 	log.Fatal(http.ListenAndServe(":8000", mainRouter))

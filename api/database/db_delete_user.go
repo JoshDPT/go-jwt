@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"encoding/json"
@@ -15,7 +15,7 @@ import (
 //
 // The success response is encoded as JSON and sent in the response body.
 
-func deleteUser(w http.ResponseWriter, r *http.Request) {
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	// Get the value of the "id" query parameter
 	id := r.URL.Query().Get("id")

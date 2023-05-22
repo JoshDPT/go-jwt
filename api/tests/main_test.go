@@ -1,4 +1,4 @@
-package main
+package tests
 
 import (
 	"bytes"
@@ -9,12 +9,20 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/JoshDPT/go-jwt/api/database"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
+type User struct {
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 func TestLoginAndCreateUser(t *testing.T) {
 	// Set up test environment
-	connectTestDB()
+	database.ConnectDB()
 
 	// Perform login and retrieve JWT token
 	jwtToken := performLogin_test(t)
@@ -31,7 +39,7 @@ func TestLoginAndCreateUser(t *testing.T) {
 
 func performLogin_test(t *testing.T) string {
 
-	server := httptest.NewServer(http.HandlerFunc(login))
+	server := httptest.NewServer(http.HandlerFunc(database.Login))
 	defer server.Close()
 
 	// Define the request body as a byte slice
@@ -80,7 +88,7 @@ func performLogin_test(t *testing.T) string {
 
 func createUser_test(t *testing.T, jwtToken string) {
 	// Set up a test HTTP server for creating user
-	server := httptest.NewServer(http.HandlerFunc(createUser))
+	server := httptest.NewServer(http.HandlerFunc(database.CreateUser))
 	defer server.Close()
 
 	// Define the request body as a byte slice
@@ -109,7 +117,7 @@ func createUser_test(t *testing.T, jwtToken string) {
 
 func getUsersAndFindUserID_test(t *testing.T, jwtToken string) int {
 	// Set up a test HTTP server for getting users
-	server := httptest.NewServer(http.HandlerFunc(getUsers))
+	server := httptest.NewServer(http.HandlerFunc(database.CreateUser))
 	defer server.Close()
 
 	// Create a new GET request
@@ -162,7 +170,7 @@ func getUsersAndFindUserID_test(t *testing.T, jwtToken string) int {
 
 func deleteUserByID_test(t *testing.T, jwtToken string, id int) {
 	// Set up a test HTTP server for deleting user
-	server := httptest.NewServer(http.HandlerFunc(deleteUser))
+	server := httptest.NewServer(http.HandlerFunc(database.DeleteUser))
 	defer server.Close()
 
 	// Create a new DELETE request
