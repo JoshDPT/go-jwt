@@ -1,16 +1,15 @@
-package middleware
+package main
 
 import (
 	"fmt"
 	"strings"
 
-	"github.com/JoshDPT/go-jwt/api/lib"
 
 	"github.com/golang-jwt/jwt"
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var jwtSecret = []byte(lib.GetMyEnv("JWT_TOKEN"))
+var jwtSecret = []byte(GetMyEnv("JWT_TOKEN"))
 // validateToken validates the provided JWT token string.
 // It removes the "Bearer " prefix from the token string, if present.
 // Then, it parses the token and validates its signature using the secret key.

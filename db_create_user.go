@@ -1,4 +1,4 @@
-package database
+package main
 
 import (
 	"encoding/json"
@@ -7,12 +7,6 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 )
-
-type User struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
 
 // createUser handles the creation of a new user based on the provided request body.
 // It decodes the JSON request body into a User struct and performs validation on the user data.

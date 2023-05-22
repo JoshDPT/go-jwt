@@ -1,4 +1,4 @@
-package database
+package main
 
 import (
 	"database/sql"
@@ -7,13 +7,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/JoshDPT/go-jwt/api/lib"
-
 	"github.com/golang-jwt/jwt"
 	_ "github.com/mattn/go-sqlite3"
 )
-
-var jwtSecret = []byte(lib.GetMyEnv("JWT_TOKEN"))
 
 // login authenticates a user by validating their credentials against
 // the database and generates a JWT token upon successful authentication.

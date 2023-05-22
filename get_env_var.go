@@ -1,10 +1,9 @@
-package lib
+package main
 
 import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"path/filepath"
 )
 
 // getMyEnv retrieves the value of the environment variable specified by the input string.
@@ -15,17 +14,19 @@ import (
 
 func GetMyEnv(s string) string {
 
-	// Get the absolute file path of the root directory
-	rootDir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
+	// // Get the absolute file path of the root directory
+	// rootDir, err := os.Getwd()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	// Construct the absolute file path of the .env file
-	envFile := filepath.Join(rootDir, ".env")
+	// // Construct the absolute file path of the .env file
+	// envFile := filepath.Join(rootDir, ".env")
+
+	// log.Println(envFile)
 
 	// Load the .env file
-	err = godotenv.Load(envFile)
+	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
